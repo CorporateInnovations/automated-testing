@@ -1,0 +1,783 @@
+{
+  "document_title": "Proximo TLOD 3.0 rebuild - Scope",
+  "summary": "Scope document for redesign and functional changes to The League of Darkness site (TLOD). Includes front-end redesign, registration and login updates, home page dynamic sections, user dashboard, Kraken Inkorporated Store (KIS) enhancements including shipping rules, content and competitions updates, serves and masterclasses video behaviors, achievements system overhaul (badges/milestones), CMS editor changes (WYSIWYG source access), reporting update for Disciple status, and testing/browser matrix.",
+  "user_stories": [
+    {
+      "id": "US-001",
+      "feature": "Registration",
+      "title": "Single-page registration with updated fields and marketing preferences",
+      "role": "New user",
+      "goal": "Register an account using the new single-page flow capturing DOB, role and bar type, and optionally marketing preferences",
+      "benefit": "Faster signup with correct data captured for gamification and marketing",
+      "acceptance_criteria": [
+        "Registration is on a single page with fields matching new creative",
+        "Date of Birth is captured via six separate input boxes (DD MM YYYY split into six fields as specified by creative)",
+        "Marketing preferences fields are present and optional; if left unchecked they are stored as 'false' in the database",
+        "Bar owner field includes the specified list of bar types and an 'Other' option which reveals a free text box when selected",
+        "Successful registration creates a new user account and allows immediate login"
+      ],
+      "related_test_ids": [
+        "TC-001",
+        "TC-002",
+        "TC-003",
+        "TC-004"
+      ]
+    },
+    {
+      "id": "US-002",
+      "feature": "Login",
+      "title": "Unchanged login flow and anchored login/register buttons",
+      "role": "Returning user",
+      "goal": "Log in with existing credentials using anchor buttons that remain visible while scrolling",
+      "benefit": "Easy access to login from any part of the site",
+      "acceptance_criteria": [
+        "Login functionality remains unchanged from existing implementation",
+        "Login and Register buttons are present at the top of the page and remain anchored while scrolling",
+        "Terms and Conditions link is available on the login page and as a menu option post-login"
+      ],
+      "related_test_ids": [
+        "TC-005",
+        "TC-024"
+      ]
+    },
+    {
+      "id": "US-003",
+      "feature": "Home Page",
+      "title": "Dynamic home page with ordered carousels and removable empty sections",
+      "role": "Authenticated or guest user",
+      "goal": "See curated and dynamic content such as Latest Content, Offers, KIS Hero Product, Serve of the Month and Suggested content",
+      "benefit": "Relevant and up-to-date front page that can drive engagement",
+      "acceptance_criteria": [
+        "Latest content and latest offers are displayed in carousels ordered newest-to-oldest and auto-scroll every 10 seconds",
+        "If a section has no content in the CMS, that section is removed from the front end",
+        "Serve of the Month uses CMS 'featured' flag and CMS prevents more than one featured serve with an error message indicating existing serve ID",
+        "KIS Hero Product displays the featured product selected in the CMS and header image uploaded via CMS appears in the section"
+      ],
+      "related_test_ids": [
+        "TC-007",
+        "TC-008",
+        "TC-009",
+        "TC-010"
+      ]
+    },
+    {
+      "id": "US-004",
+      "feature": "CMS",
+      "title": "WYSIWYG editor source code access and carousel banner module usage",
+      "role": "Content editor / Developer",
+      "goal": "Add required content and buttons via CMS and use carousel banner module for dynamic sections",
+      "benefit": "Editors can update content while developers can inject required snippets to add advanced buttons",
+      "acceptance_criteria": [
+        "WYSIWYG editor has source code button enabled to allow inserting developer-provided snippet",
+        "Carousel banners module supports image, title, heading, subheading, configurable button copy and colour picking",
+        "Editors can mark products/serves as 'featured' where applicable",
+        "CMS enforces max 1000 characters on competition entry fields and includes category fields for content and competitions"
+      ],
+      "related_test_ids": [
+        "TC-011",
+        "TC-007",
+        "TC-014",
+        "TC-015"
+      ]
+    },
+    {
+      "id": "US-005",
+      "feature": "Kraken Inkorporated Store",
+      "title": "Catalogue browsing and checkout with shipping rules",
+      "role": "Customer",
+      "goal": "Browse catalogue as guest and purchase items after login; shipping applied correctly",
+      "benefit": "Accessible store with clear purchase flow and correct shipping calculation",
+      "acceptance_criteria": [
+        "Guests can browse the catalogue and view products in a carousel pre-login",
+        "Attempting to checkout as guest prompts login/registration before purchase completion",
+        "Shipping is added as a basket item dynamically when basket total < £30 (shipping = £3.99) and not added when basket total >= £30",
+        "Ad hoc price reductions can be shown per product but complex promotions (2-for-1, % auto-applied) are out of scope"
+      ],
+      "related_test_ids": [
+        "TC-012",
+        "TC-013"
+      ]
+    },
+    {
+      "id": "US-006",
+      "feature": "Latest Content",
+      "title": "Latest content page with category filters and related articles",
+      "role": "Reader",
+      "goal": "Find articles by category and see related articles per role type at bottom of article",
+      "benefit": "Improved discoverability of content",
+      "acceptance_criteria": [
+        "Latest content page displays thumbnails (image, title, subtitle, Learn More button) and supports filters: News, Content, Events, Guides",
+        "Article pages show related articles at bottom selected randomly but only for role types assigned to the article",
+        "If no custom button copy capability exists without extra budget, default button text is 'Learn More'"
+      ],
+      "related_test_ids": [
+        "TC-015",
+        "TC-007"
+      ]
+    },
+    {
+      "id": "US-007",
+      "feature": "Latest Competitions",
+      "title": "Competitions listing with live and annual sections and entry validation",
+      "role": "Authenticated user",
+      "goal": "Enter competitions with input limits and see correct messages when none are live",
+      "benefit": "Reliable competition entry process and clear status messaging",
+      "acceptance_criteria": [
+        "Live/temporary and annual competitions sections display competitions using existing module and configured categories",
+        "Competition free-text entry fields are limited to 1000 characters and input box expands to show full text",
+        "If no competitions are live the message 'there are no competitions currently running, please check back soon' is shown"
+      ],
+      "related_test_ids": [
+        "TC-014"
+      ]
+    },
+    {
+      "id": "US-008",
+      "feature": "Serves",
+      "title": "Serves and Masterclasses video behavior and recipe downloads",
+      "role": "User",
+      "goal": "Play serves and masterclass videos to earn points and download recipe card PDFs",
+      "benefit": "Engaging educational content with earn mechanics",
+      "acceptance_criteria": [
+        "Videos in Serves and Masterclasses are viewable by the configured role types",
+        "Watching a video is counted as 'viewed' and awards an earn only after 90% playback completion",
+        "Download recipe cards button opens a PDF in a new window",
+        "Cocktails can be tagged to pages and a single cocktail can only belong to one category"
+      ],
+      "related_test_ids": [
+        "TC-016",
+        "TC-017"
+      ]
+    },
+    {
+      "id": "US-009",
+      "feature": "Achievements",
+      "title": "Achievements, milestones and Disciple of the Kraken flow",
+      "role": "User aiming to progress",
+      "goal": "Track progress across tasks, complete milestones and perform Disciple redemption",
+      "benefit": "Gamified progression with clear feedback and reporting",
+      "acceptance_criteria": [
+        "Achievements page shows levels (bronze/silver/gold) and indicates completed badges; blue dot indicates available tasks",
+        "Most recent four completed claims are shown in the progress component",
+        "Disciple of the Kraken flow prompts to sacrifice 500 points; if user has <500 points a message tells them they need more points; on success badge turns gold and user report includes Disciple status = yes and a date"
+      ],
+      "related_test_ids": [
+        "TC-018",
+        "TC-019",
+        "TC-022"
+      ]
+    },
+    {
+      "id": "US-010",
+      "feature": "User Dashboard",
+      "title": "Dashboard ordering and account management",
+      "role": "Authenticated user",
+      "goal": "Access account, manage profile, view credits, order history and membership proof with updated ordering",
+      "benefit": "Easier access to recent activity and account tools",
+      "acceptance_criteria": [
+        "Profile page shows DOB with number boxes labeled DD MM YY and existing functionality unchanged otherwise",
+        "Credits/reward history and order history are ordered newest-to-oldest",
+        "Proof of membership opens a pop-up when selected from dashboard"
+      ],
+      "related_test_ids": [
+        "TC-020"
+      ]
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "feature": "Registration",
+      "title": "Complete single-page registration happy path",
+      "steps": [
+        "Navigate to /register",
+        "Fill in required fields: first name, last name, email (unique), password and confirm password",
+        "Fill Date of Birth using six separate input boxes as per design (DD MM YYYY split across six inputs)",
+        "Select a role (default consumer) and select a bar type from dropdown or radio",
+        "If 'Other' is selected, enter free text in the revealed box",
+        "Optionally tick or leave marketing preferences unchecked",
+        "Submit the registration form",
+        "Verify UI shows successful registration and redirects to logged-in landing page or prompts to login per spec",
+        "Query DB for created user record by email and verify stored fields"
+      ],
+      "expected_result": "User account created; DB user record contains provided name, email, DOB in proper fields, bar type stored (with 'Other' text saved), marketing preferences stored as 'true' if checked and 'false' if unchecked; user is able to proceed to logged-in area or shown confirmation according to creative",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "registration",
+        "ui",
+        "database"
+      ],
+      "risk": null,
+      "trace": "US-001"
+    },
+    {
+      "id": "TC-002",
+      "feature": "Registration",
+      "title": "Date of Birth input validation and format (six fields)",
+      "steps": [
+        "Navigate to /register",
+        "Locate Date of Birth section and confirm presence of six input boxes with DD MM YY markings or placeholders",
+        "Enter a valid date split across the six inputs and attempt submission",
+        "Check stored DOB value in DB matches combined value (DD/MM/YYYY) expected",
+        "Enter invalid values (e.g., letters, out-of-range day '32', month '13') in inputs and attempt submission"
+      ],
+      "expected_result": "Six separate DOB input boxes are present; valid input allows submission and DB stores normalized DOB; invalid input displays inline validation messages and prevents submission",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "registration",
+        "validation"
+      ],
+      "risk": null,
+      "trace": "US-001"
+    },
+    {
+      "id": "TC-003",
+      "feature": "Registration",
+      "title": "Marketing preferences optionality and DB handling",
+      "steps": [
+        "Navigate to /register",
+        "Complete registration form leaving marketing preference checkboxes unchecked",
+        "Submit registration",
+        "Query DB for the created user record and verify marketing preference fields are stored as false (or equivalent 'opt-out' value)",
+        "Repeat registration (or edit profile) with marketing preference boxes checked and verify DB stores true"
+      ],
+      "expected_result": "When marketing preferences are left unchecked the DB marks fields as 'false' or equivalent; when checked the DB stores 'true'; no validation prevents submission when unchecked",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "registration",
+        "database",
+        "privacy"
+      ],
+      "risk": null,
+      "trace": "US-001"
+    },
+    {
+      "id": "TC-004",
+      "feature": "Registration",
+      "title": "Bar type selection including 'Other' free text",
+      "steps": [
+        "Open /register",
+        "Select each bar type option sequentially and submit (in separate accounts) to ensure selection is stored",
+        "Select 'Other' option and verify a free text input appears",
+        "Enter free text and submit",
+        "Verify DB stores the selected bar type and free text value where applicable"
+      ],
+      "expected_result": "All specified bar type selections can be chosen and stored; selecting 'Other' reveals a free text box whose content is saved in the user's record",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "registration",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-001"
+    },
+    {
+      "id": "TC-005",
+      "feature": "Login",
+      "title": "Existing login happy path",
+      "steps": [
+        "Navigate to /login",
+        "Enter valid email and password",
+        "Submit login form",
+        "Confirm user is redirected to the dashboard or authenticated home area"
+      ],
+      "expected_result": "User is authenticated and redirected to the dashboard/home; session cookie or token is issued per site auth mechanism",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "login",
+        "authentication"
+      ],
+      "risk": null,
+      "trace": "US-002"
+    },
+    {
+      "id": "TC-006",
+      "feature": "Home Page",
+      "title": "Login/Register buttons anchored and Terms link present",
+      "steps": [
+        "Open landing page and home page on desktop",
+        "Scroll down page and observe top-right area",
+        "Verify Login and Register buttons remain visible (anchored) while scrolling",
+        "Open Login page and confirm Terms and Conditions link present at bottom"
+      ],
+      "expected_result": "Login and Register buttons remain anchored and visible while scrolling; Terms and Conditions link exists on the login page and as a menu item when logged in",
+      "priority": "P2",
+      "type": "ui",
+      "tags": [
+        "navigation",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-002"
+    },
+    {
+      "id": "TC-007",
+      "feature": "Home Page",
+      "title": "Latest Content and Offers carousel ordering and auto-scroll",
+      "steps": [
+        "Open home page",
+        "Locate Latest Content carousel and Latest Offer carousel",
+        "Confirm items appear ordered newest-to-oldest (first visible is newest)",
+        "Observe auto-scroll and verify carousel advances approximately every 10 seconds",
+        "Click carousel navigation to manually advance and observe order"
+      ],
+      "expected_result": "Carousels display items newest-to-oldest and auto-scrolls every ~10 seconds; manual navigation retains ordering",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "content",
+        "carousel",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-003, US-006, US-004"
+    },
+    {
+      "id": "TC-008",
+      "feature": "Home Page",
+      "title": "Empty CMS sections are removed from front end",
+      "steps": [
+        "Ensure Latest Offer section has no entries in CMS",
+        "Load home page",
+        "Verify Latest Offer section is not rendered on front end",
+        "Re-add an item in CMS and refresh page to verify section reappears"
+      ],
+      "expected_result": "Sections with no CMS content are not displayed on the home page; re-adding content restores the section",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "home page",
+        "cms",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-003"
+    },
+    {
+      "id": "TC-009",
+      "feature": "Home Page",
+      "title": "Serve of the Month featured restriction enforced in CMS",
+      "steps": [
+        "Attempt to mark a different serve (Serve B) as 'featured' in CMS while Serve A is already featured",
+        "Submit the CMS save action",
+        "Observe CMS response for error messaging specifying that another serve is already featured and include the existing serve ID",
+        "Verify front end still shows the original featured serve (Serve A) until conflict resolved"
+      ],
+      "expected_result": "CMS prevents marking more than one 'featured' serve and displays an error message indicating existing featured serve ID; front end remains consistent",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "cms",
+        "serves",
+        "validation"
+      ],
+      "risk": null,
+      "trace": "US-003, US-004"
+    },
+    {
+      "id": "TC-010",
+      "feature": "Home Page",
+      "title": "KIS Hero Product displays featured product and header image",
+      "steps": [
+        "Open home page",
+        "Locate KIS Hero Product section",
+        "Verify featured product title, image and CTA appear and link to the product catalogue page",
+        "Verify header image displays and visually matches the uploaded CMS asset",
+        "If possible, confirm CMS header image dimensions are accepted (note: min/max widths to be confirmed with developers)"
+      ],
+      "expected_result": "KIS Hero Product shows the featured product and header image as set in CMS with working link to catalogue",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "store",
+        "cms",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-003, US-005"
+    },
+    {
+      "id": "TC-011",
+      "feature": "CMS",
+      "title": "WYSIWYG editor source code button enabled and snippet insertion",
+      "steps": [
+        "Open CMS Pages editing for a page with WYSIWYG editor",
+        "Confirm the source code (HTML) button is available in the editor toolbar",
+        "Click source code button and insert developer-provided snippet for custom button",
+        "Save page and publish to staging",
+        "Load front end page and verify inserted button appears and functions as expected"
+      ],
+      "expected_result": "Source code button present; developer snippet can be inserted and renders correctly on front end",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "cms",
+        "editor"
+      ],
+      "risk": null,
+      "trace": "US-004"
+    },
+    {
+      "id": "TC-012",
+      "feature": "Store/Checkout",
+      "title": "Catalogue browse as guest and checkout requires login",
+      "steps": [
+        "Open /krakeninkcatalogue as guest",
+        "Browse carousel and click 'Shop now' to open product listing",
+        "Add a product to basket",
+        "Attempt to proceed to checkout as guest",
+        "Verify site prompts to login or register before purchase completion",
+        "Login with test account and proceed to checkout to complete payment flow in Stripe test mode"
+      ],
+      "expected_result": "Guests can browse products; attempting checkout redirects to login/registration; after login user can complete checkout through test Stripe flow",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "store",
+        "checkout",
+        "auth"
+      ],
+      "risk": null,
+      "trace": "US-005"
+    },
+    {
+      "id": "TC-013",
+      "feature": "Store/Checkout",
+      "title": "Shipping cost applied dynamically based on basket total",
+      "steps": [
+        "Login with test account",
+        "Add items to basket totaling £29.99",
+        "Open basket and verify shipping of £3.99 appears as an additional line item and is included in total",
+        "Remove items or change quantities to drop total below and above thresholds to verify dynamic addition/removal",
+        "Add items to reach exactly £30.00 and verify shipping is not added and is shown as free",
+        "Proceed to checkout and verify final total reflects shipping rule"
+      ],
+      "expected_result": "If basket total < £30, shipping £3.99 is added dynamically; if total >= £30 shipping not added and displayed as free; changes update immediately as basket changes",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "store",
+        "checkout",
+        "integration"
+      ],
+      "risk": null,
+      "trace": "US-005"
+    },
+    {
+      "id": "TC-014",
+      "feature": "Competitions",
+      "title": "Live competitions display and entry field validation (1000 chars)",
+      "steps": [
+        "Open /competitions",
+        "Confirm live competitions section lists current live competitions",
+        "Open a competition entry and type a response of 1000 characters and submit (if allowed)",
+        "Attempt to type 1001 characters and verify input is blocked or validation prevents submission",
+        "Clear all competitions in CMS and load page to verify message 'there are no competitions currently running, please check back soon' is displayed"
+      ],
+      "expected_result": "Live competitions are visible; entry fields accept up to 1000 characters and prevent more; empty competitions show the specified message",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "competitions",
+        "validation",
+        "cms"
+      ],
+      "risk": null,
+      "trace": "US-007, US-004"
+    },
+    {
+      "id": "TC-015",
+      "feature": "Latest Content",
+      "title": "Content page category filters and related articles by role",
+      "steps": [
+        "Navigate to /blog (Latest Content)",
+        "Use category filter to select 'News' and verify only 'News' articles display",
+        "Repeat for 'Content', 'Events' and 'Guides' filters",
+        "Open an article and scroll to bottom to verify related articles are shown and filtered by the role type of the viewer",
+        "Repeat for different logged-in roles (consumer, trade, franchise) verifying related articles respect role assignments"
+      ],
+      "expected_result": "Filters show only articles of selected category; article page displays related articles selected randomly but only those assigned to the user's role type",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "content",
+        "filter",
+        "cms"
+      ],
+      "risk": null,
+      "trace": "US-006"
+    },
+    {
+      "id": "TC-016",
+      "feature": "Serves",
+      "title": "Video playback detection awards earn at 90% completion",
+      "steps": [
+        "Login as test user",
+        "Open a serve video page with an associated earn",
+        "Programmatically play the video and seek to 90% of duration, ensuring playback reaches 90% (simulate or allow full playback)",
+        "After 90% playback, refresh page or check user earns/claim history",
+        "Repeat playback and stop at 89% and verify no earn is granted"
+      ],
+      "expected_result": "When video playback reaches >=90% the user is awarded the configured earn/claim; playback <90% does not award earn",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "serves",
+        "video",
+        "earn"
+      ],
+      "risk": null,
+      "trace": "US-008"
+    },
+    {
+      "id": "TC-017",
+      "feature": "Serves",
+      "title": "Download recipe card PDF opens in new window",
+      "steps": [
+        "Open a Serves category page (e.g., Black Spiced Serves)",
+        "Click 'Download recipe cards' button",
+        "Observe that a new browser tab/window opens and the PDF loads",
+        "Verify PDF URL matches expected S3 path or configured asset"
+      ],
+      "expected_result": "Clicking the download button opens a new window/tab and displays the PDF document",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "serves",
+        "download",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-008"
+    },
+    {
+      "id": "TC-018",
+      "feature": "Achievements",
+      "title": "Achievements UI shows levels, blue dot and most recent four completed claims",
+      "steps": [
+        "Login as test user",
+        "Navigate to Achievements page (/earn)",
+        "Confirm sections for foundation tasks, milestones and dark deeds show available badges with blue dots for tasks available",
+        "Verify completed badges are colored and incomplete ones are greyed out",
+        "Confirm the progress component displays the four most recently completed claims"
+      ],
+      "expected_result": "Achievements UI correctly indicates completed badges, blue dot for available tasks and shows the most recent four completed claims in the progress area",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "achievements",
+        "ui",
+        "progress"
+      ],
+      "risk": null,
+      "trace": "US-009"
+    },
+    {
+      "id": "TC-019",
+      "feature": "Achievements",
+      "title": "Disciple of the Kraken sacrifice points flow (500 points)",
+      "steps": [
+        "As user with <500 points, navigate to Disciple of the Kraken page and click 'sacrifice points' button",
+        "Verify prompt indicates insufficient points and user cannot proceed",
+        "As user with >=500 points, click 'sacrifice points' button and confirm deduction of 500 points",
+        "Verify badge image turns gold after successful sacrifice and UI shows updated state",
+        "Query user report and verify 'Disciple status' column shows 'yes' and date column populated for the successful user"
+      ],
+      "expected_result": "Users with <500 are prevented and shown a clear message; users with >=500 can sacrifice 500 points and upon success badge turns gold and report updated with Disciple status = yes and date",
+      "priority": "P1",
+      "type": "functional",
+      "tags": [
+        "achievements",
+        "points",
+        "reporting"
+      ],
+      "risk": null,
+      "trace": "US-009, US-010"
+    },
+    {
+      "id": "TC-020",
+      "feature": "User Dashboard",
+      "title": "Ordering of credits/rewards and order history newest-to-oldest and proof of membership pop-up",
+      "steps": [
+        "Login and navigate to Account > Reward History",
+        "Verify rewards list is ordered newest-to-oldest",
+        "Navigate to Account > Order History and verify orders are ordered newest-to-oldest",
+        "From dashboard click 'Proof of Membership' circle and verify pop-up appears with membership details"
+      ],
+      "expected_result": "Rewards and order history are displayed newest-to-oldest; proof of membership opens as a pop-up",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "dashboard",
+        "ui",
+        "order"
+      ],
+      "risk": null,
+      "trace": "US-010"
+    },
+    {
+      "id": "TC-021",
+      "feature": "Content",
+      "title": "Promo code page redesign presence and accessible",
+      "steps": [
+        "Navigate to /promocode",
+        "Verify page loads and new creative is applied",
+        "Ensure promo entry fields (if any) accept input and show expected UI"
+      ],
+      "expected_result": "Promo page redesigned per creative and loads successfully",
+      "priority": "P3",
+      "type": "ui",
+      "tags": [
+        "promo",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-009"
+    },
+    {
+      "id": "TC-022",
+      "feature": "Reporting",
+      "title": "User report includes Disciple status and date columns",
+      "steps": [
+        "Generate user report from CMS or admin reporting tool",
+        "Confirm report includes 'Disciple status' column with yes/no values and 'Disciple date' column populated where status = yes",
+        "Verify exported values match DB user records"
+      ],
+      "expected_result": "User report contains 'Disciple status' and date columns that accurately reflect user state",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "reporting",
+        "backend"
+      ],
+      "risk": null,
+      "trace": "US-009"
+    },
+    {
+      "id": "TC-023",
+      "feature": "Preferences page",
+      "title": "Marketing preferences screen commented out of code but retained for later (UI hidden)",
+      "steps": [
+        "Search site navigation and account settings for 'Preferences' page link",
+        "Verify Preferences page is not accessible via UI (no menu link)",
+        "Confirm endpoint or code for preferences still exists in repository (developer/CI check) but UI is hidden or commented",
+        "Attempt to access preferences URL directly and verify access is blocked or page displays 'not available' per spec"
+      ],
+      "expected_result": "Preferences functionality is removed from visible UI but code remains in repository or commented out; direct access blocked or shows controlled message",
+      "priority": "P3",
+      "type": "functional",
+      "tags": [
+        "preferences",
+        "cms",
+        "code"
+      ],
+      "risk": null,
+      "trace": "US-001, US-002"
+    },
+    {
+      "id": "TC-024",
+      "feature": "Menu",
+      "title": "Menu Account button navigates to dashboard (not dropdown) and menu order follows site map",
+      "steps": [
+        "Open site and click menu icon in top right",
+        "Verify pages listed in order as shown on site map",
+        "Click Account menu item and verify it navigates directly to dashboard page rather than expanding a dropdown",
+        "Verify menu icons display and match expected visuals"
+      ],
+      "expected_result": "Menu shows pages in specified order; Account navigates directly to dashboard; icons updated as per creative",
+      "priority": "P2",
+      "type": "ui",
+      "tags": [
+        "navigation",
+        "menu"
+      ],
+      "risk": null,
+      "trace": "US-002, US-003"
+    },
+    {
+      "id": "TC-025",
+      "feature": "Serves",
+      "title": "Cocktail tagging and individual cocktail pages show recommended cocktails from same group",
+      "steps": [
+        "Open individual cocktail page",
+        "Verify ingredients, method and additional info are displayed",
+        "Check recommended cocktails section shows only cocktails from the same group",
+        "If cocktail is tagged as Masterclass video, verify it appears in both Masterclasses and relevant serves page"
+      ],
+      "expected_result": "Individual cocktail page shows full details and recommended cocktails limited to same group; masterclass-tagged cocktails appear in both places when flagged",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "serves",
+        "cms",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-008"
+    },
+    {
+      "id": "TC-026",
+      "feature": "Masterclasses",
+      "title": "Masterclass videos award earns when 90% played",
+      "steps": [
+        "Login as test user",
+        "Open Masterclasses page and play a masterclass video",
+        "Ensure playback reaches >=90% and verify earn awarded in user earns history",
+        "Stop at <90% and verify no earn awarded"
+      ],
+      "expected_result": "Masterclass videos behave the same as serves: earn is granted at >=90% playback",
+      "priority": "P2",
+      "type": "functional",
+      "tags": [
+        "masterclasses",
+        "video",
+        "earn"
+      ],
+      "risk": null,
+      "trace": "US-008"
+    },
+    {
+      "id": "TC-027",
+      "feature": "Latest Content / Home Page",
+      "title": "Suggested content and suggested KIS product items are randomly generated and not editable in CMS",
+      "steps": [
+        "Load home page multiple times using same user session and different sessions",
+        "Observe Suggested content and Suggested KIS Product slots and record values across loads",
+        "Attempt to find edit controls in CMS for these modules (verify not editable)"
+      ],
+      "expected_result": "Suggested content and KIS product modules display different items across loads indicating randomness; no CMS edit controls exist for these modules",
+      "priority": "P3",
+      "type": "functional",
+      "tags": [
+        "content",
+        "random",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "US-003, US-006"
+    }
+  ],
+  "assumptions": [
+    "Staging environment, test Stripe keys and CMS access will be provided for QA",
+    "Seed data for users, products, serves, videos and achievements will be available or QA can create required CMS entries",
+    "S3 assets (recipe PDFs, video placeholders) will be accessible in staging",
+    "Analytics and GA tagging are already in place and do not require additional development time",
+    "BrowserStack or equivalent will be used for cross-browser/device verification where physical devices are not available",
+    "No age-gating beyond DOB capture is implemented unless otherwise specified by Proximo"
+  ],
+  "risks": [
+    "Min/max image width requirements for KIS Hero header image are not specified (unclear requirement) — may cause visual defects or require rework",
+    "Exact DOB validation rules (e.g., age minimum) are not specified; assumptions made that DOB is required but no age gating — potential policy/regulatory risk",
+    "Implementation detail of video 90% playback detection (how 90% is measured and offline buffering behavior) is not fully specified and may vary by player implementation",
+    "Serve of the Month CMS error messaging exact text and format is not specified; tests check for presence of an error and an existing serve ID but wording may differ",
+    "WYSIWYG source code enablement and developer snippet insertion responsibility are unclear (developer must supply snippet and training) — potential delivery risk",
+    "Shipping integration with Stripe is described as adding a 'Shipping' product to basket; exact implementation may differ and could affect checkout flow",
+    "Suggested content is random and not editable — randomness makes deterministic automated verification harder; tests rely on probabilistic checking and CMS inspection",
+    "Pagination on Rewards/Orders was noted as out of scope; large datasets might impact UI performance but are not addressed in current scope"
+  ]
+}

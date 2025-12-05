@@ -1,0 +1,107 @@
+:root {
+  --bg: #0f1116;
+  --panel: #181c24;
+  --text: #e7ecf3;
+  --muted: #9aa4b5;
+  --accent: #6dd3fb;
+  --accent-2: #7cf29c;
+  --border: #2a3040;
+  --danger: #f56565;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+}
+
+header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(120deg, #121621, #0f1116);
+}
+h1, h2 { margin: 0 0 8px; }
+
+main { padding: 20px; }
+section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+
+button {
+  background: var(--accent);
+  color: #0b0d12;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled {
+  background: #3a3f4f;
+  color: #7c8599;
+  cursor: not-allowed;
+}
+input[type="file"] { color: var(--muted); }
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.actions { display: flex; gap: 10px; align-items: center; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+th, td {
+  border-bottom: 1px solid var(--border);
+  padding: 8px 6px;
+  text-align: left;
+  font-size: 14px;
+}
+th { color: var(--muted); font-weight: 600; }
+tr:hover { background: #1f2531; }
+
+.tag { background: #273040; color: var(--accent-2); padding: 2px 6px; border-radius: 6px; font-size: 12px; }
+.hidden { display: none; }
+.log {
+  background: #0b0d12;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px;
+  height: 240px;
+  overflow: auto;
+  color: var(--accent-2);
+  font-family: 'SFMono-Regular', Consolas, monospace;
+  font-size: 12px;
+}
+
+#upload-status { color: var(--muted); margin-top: 8px; }
+#plan-meta { color: var(--muted); }
+#run-meta { color: var(--muted); margin-bottom: 8px; }
+
+.preview-frame {
+  margin-top: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: auto;
+  background: #0b0d12;
+}
+
+#preview-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}

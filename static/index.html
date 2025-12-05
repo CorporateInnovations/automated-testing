@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Test Plan Extractor</title>
+  <link rel="stylesheet" href="/ui/style.css">
+</head>
+<body>
+  <header>
+    <h1>AI Test Plan Extractor</h1>
+  </header>
+
+  <main>
+    <section id="upload-section">
+      <h2>Upload Scope (PDF/DOCX)</h2>
+      <input type="file" id="file-input" accept=".pdf,.docx">
+      <button id="upload-btn">Upload &amp; Extract</button>
+      <div id="upload-status"></div>
+    </section>
+
+    <section id="plan-section" class="hidden">
+      <div class="flex-row">
+        <div>
+          <h2>Plan</h2>
+          <div id="plan-meta"></div>
+        </div>
+        <div class="actions">
+          <button id="save-spec-btn" disabled>Save Playwright Spec</button>
+          <button id="run-tests-btn" disabled>Run Tests</button>
+          <label><input type="checkbox" id="headed-toggle" checked> Headed</label>
+        </div>
+      </div>
+      <div id="tests-container"></div>
+    </section>
+
+    <section id="run-section" class="hidden">
+      <h2>Run Status</h2>
+      <div id="run-meta"></div>
+      <pre id="run-log" class="log"></pre>
+    </section>
+
+    <section id="preview-section">
+      <h2>Live Preview (headless stream)</h2>
+      <div class="flex-row">
+        <input type="text" id="preview-url" placeholder="https://example.com" />
+        <button id="preview-start-btn">Start Preview</button>
+        <button id="preview-stop-btn" disabled>Stop</button>
+      </div>
+      <div id="preview-status"></div>
+      <div class="preview-frame">
+        <img id="preview-img" alt="Preview frame" />
+      </div>
+    </section>
+  </main>
+
+  <script src="/ui/main.js"></script>
+</body>
+</html>

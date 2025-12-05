@@ -1,0 +1,30 @@
+{
+  "document_title": "CI Group Staging - Signup Flow",
+  "summary": "Navigate to CI Group staging login, open sign up, and complete registration form.",
+  "test_cases": [
+    {
+      "id": "TC-CI-SIGNUP-001",
+      "feature": "Registration",
+      "title": "Navigate to login, go to Sign Up, and submit registration",
+      "steps": [
+        "Navigate to https://cigroup-staging.iamsami.co.uk/login",
+        "Click Sign Up / Register",
+        "Fill Name field",
+        "Fill Email field",
+        "Fill Password field",
+        "Fill Confirm Password field",
+        "Submit the registration form",
+        "Verify successful signup (e.g., redirected to dashboard or confirmation message)"
+      ],
+      "expected_result": "User can reach the sign up form from login, submit valid details, and see a success state or dashboard.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "signup",
+        "registration",
+        "smoke"
+      ],
+      "trace": "Signup from login page"
+    }
+  ]
+}

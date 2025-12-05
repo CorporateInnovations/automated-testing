@@ -1,0 +1,477 @@
+{
+  "document_title": "Proximo TLOD 3.0 rebuild - Scope v1.8",
+  "summary": "Comprehensive test plan derived from scope document covering registration, login, home page, dashboard, store/checkout, serves/videos/masterclasses, achievements (including Disciple of the Kraken), competitions, latest content, Kraken Ink catalogue, Beast Bartender downloads, promo codes, CMS WYSIWYG behavior, and cross-browser/device coverage.",
+  "test_cases": [
+    {
+      "id": "TC-001",
+      "feature": "Registration",
+      "title": "Single-page registration - successful sign up with optional marketing preferences and bar type selection",
+      "steps": [
+        "Navigate to https://staging.theleagueofdarkness.co.uk/register",
+        "Fill first name = 'Test', last name = 'User', email = 'test.user+auto1@example.com'",
+        "Fill DOB fields: DD = '15', MM = '06', YY = '1990' (six separate inputs)",
+        "Select a role (consumer) and fill required fields (password etc.)",
+        "Select marketing preferences: check 'email' and leave 'sms' unchecked (optional fields)",
+        "Select bar type = 'Other' and enter free text 'Pop-up bar' in the displayed text box",
+        "Submit the registration form",
+        "Verify UI shows registration success (redirect to welcome / account page or success message)",
+        "Verify user record created in database with DOB stored as three components or single date, marketing preferences stored as opt-in for email and opt-out for sms, bar_type = 'Other' and bar_type_other = 'Pop-up bar'"
+      ],
+      "expected_result": "User is successfully registered. UI shows success/redirect to logged-in homepage/dashboard. Database contains user record with DOB = 15-06-1990, marketing_preferences.email = true, marketing_preferences.sms = false, bar_type = 'Other', bar_type_other = 'Pop-up bar'.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "registration",
+        "ui",
+        "db"
+      ],
+      "risk": null,
+      "trace": "Scope: Registration section (pages 15-16). Requirement: single page registration, DOB 6 fields, marketing preferences optional, bar type options with 'Other' -> free text."
+    },
+    {
+      "id": "TC-002",
+      "feature": "Registration",
+      "title": "DOB field validation - invalid, incomplete and future date handling",
+      "steps": [
+        "Navigate to /register",
+        "Enter DOB DD='aa', MM='bb', YY='199a' (non-numeric) and attempt to submit",
+        "Enter DOB with incomplete fields DD='', MM='05', YY='1995' and attempt to submit",
+        "Enter DOB representing a future date DD='01', MM='01', YY='2100' and attempt to submit",
+        "Enter DOB that would make user under allowed minimum age (if age restriction exists) e.g., 01/01/2010 and attempt to submit"
+      ],
+      "expected_result": "Form shows inline validation errors for non-numeric input and incomplete fields; future dates are rejected with a clear error; if age restriction is enforced by backend, underage DOB rejected with appropriate message. No account created in any negative case.",
+      "priority": "P1",
+      "type": "Validation",
+      "tags": [
+        "registration",
+        "validation",
+        "ui"
+      ],
+      "risk": null,
+      "trace": "Scope: Registration section (page 15). Requirement: DOB changed to six fields; validation required."
+    },
+    {
+      "id": "TC-003",
+      "feature": "Login",
+      "title": "Existing login functionality - successful and failed auth",
+      "steps": [
+        "Navigate to https://staging.theleagueofdarkness.co.uk/login",
+        "Enter valid email and password and submit",
+        "Verify successful redirect to user's dashboard (/account) or home",
+        "Log out",
+        "Attempt login with valid email and incorrect password and submit",
+        "Verify error message shown and no login",
+        "Attempt login with non-existent email and submit",
+        "Verify error message shown and no login"
+      ],
+      "expected_result": "Valid credentials authenticate and redirect to dashboard. Invalid credentials produce clear error messages and no session created.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "login",
+        "authentication"
+      ],
+      "risk": null,
+      "trace": "Scope: Log in section (page 16). Requirement: login functionality remains unchanged."
+    },
+    {
+      "id": "TC-004",
+      "feature": "Home Page",
+      "title": "Anchored login/register buttons persist while scrolling and navigate when clicked",
+      "steps": [
+        "Open https://staging.theleagueofdarkness.co.uk/welcome or /home",
+        "Scroll down more than one full viewport",
+        "Observe presence and position of login and register buttons",
+        "Click login button and verify it opens /login",
+        "Return, click register button and verify it opens /register"
+      ],
+      "expected_result": "Login and register buttons remain visible (fixed/anchored) while scrolling. Clicking navigates to /login and /register respectively.",
+      "priority": "P2",
+      "type": "UI",
+      "tags": [
+        "home",
+        "ui",
+        "navigation"
+      ],
+      "risk": null,
+      "trace": "Scope: Landing page and home page (pages 10-12). Requirement: login and register buttons at top anchored as users scroll."
+    },
+    {
+      "id": "TC-005",
+      "feature": "Home Page",
+      "title": "Latest content and offers carousel ordering and auto-scroll behavior",
+      "steps": [
+        "Navigate to /home while logged-out and note timestamps/created dates of carousel items in CMS",
+        "Observe order of carousel items on front end and capture DOM order",
+        "Wait and verify carousel auto-advances approximately every 10 seconds",
+        "In CMS remove all carousel items for 'Latest offer' and publish",
+        "Reload front end and verify that the 'Latest offer' section is not shown"
+      ],
+      "expected_result": "Carousel displays items newest first (left-most/first slide = newest). Carousel auto-advances roughly every 10 seconds. If the CMS has no items configured, the corresponding section is removed from the front end.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "home",
+        "carousel",
+        "content"
+      ],
+      "risk": null,
+      "trace": "Scope: Home page (pages 18-20). Requirement: carousel tiles ordered newest-to-oldest and auto-scroll every 10 seconds; removed if empty."
+    },
+    {
+      "id": "TC-006",
+      "feature": "Kraken Serves",
+      "title": "Serve of the Month - only one featured serve allowed; CMS error and front-end display",
+      "steps": [
+        "In CMS mark one serve entry as 'featured' and publish",
+        "Open front-end home page and verify the featured serve displays in Serve of the Month section",
+        "In CMS mark a second serve as 'featured' and attempt to publish",
+        "Observe CMS response: either block publish and display an error indicating existing featured serve ID OR allow publish depending on implementation",
+        "If second serve was blocked, verify error message contains the existing featured serve ID as per requirement",
+        "If CMS allows multiple, verify front end displays only one (random/first) - record behavior"
+      ],
+      "expected_result": "CMS prevents marking more than one serve as featured; publishing attempt for second featured serve returns an error referencing the existing featured serve ID. Front end displays the single featured serve. If none are featured, the section is omitted from front end.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "serves",
+        "cms",
+        "home"
+      ],
+      "risk": null,
+      "trace": "Scope: Home page and Serves CMS (pages 19-21 & 28-31). Requirement: only one featured serve allowed; error messaging from CMS required."
+    },
+    {
+      "id": "TC-007",
+      "feature": "Masterclasses",
+      "title": "Video playback awards 'earn' after 90% playback for Masterclasses and Serves",
+      "steps": [
+        "Log in as test user",
+        "Navigate to a Masterclass video page that has an earn configured",
+        "Start video playback and programmatically advance/seek to simulate 90% of duration (or play until 90% if automation cannot seek)",
+        "Verify client triggers progress event at 90% and sends earn claim to backend",
+        "Verify backend credits points and displays earn/notification in user's credits/achievement page",
+        "Repeat for a Serve video with earn configured"
+      ],
+      "expected_result": "On 90% playback completion the system awards the configured earn: backend shows claim logged, user's point balance increments accordingly, and UI reflects the earned item in achievements/credits. Videos not played to 90% do not award earns.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "video",
+        "earns",
+        "serves",
+        "masterclasses"
+      ],
+      "risk": null,
+      "trace": "Scope: Serves and Masterclasses (pages 29-31 & 32). Requirement: videos deemed viewed at 90% played and award an earn if associated."
+    },
+    {
+      "id": "TC-008",
+      "feature": "Beast Bartender",
+      "title": "Download recipe cards opens PDF in new window",
+      "steps": [
+        "Navigate to Beast Bartender page (e.g., /beast-bartender or linked page)",
+        "Click 'Download recipe cards' button",
+        "Verify a new browser tab/window opens",
+        "Verify the URL of the new window is the PDF S3 URL and the PDF loads successfully (HTTP 200)",
+        "Verify content-type is application/pdf"
+      ],
+      "expected_result": "Clicking the download button opens a new window/tab that successfully loads the PDF document (status 200 and content-type application/pdf).",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "beast bartender",
+        "download",
+        "pdf"
+      ],
+      "risk": null,
+      "trace": "Scope: Beast Bartender (pages 29-31). Requirement: 'download all recipe cards' opens provided PDF in new tab/window."
+    },
+    {
+      "id": "TC-009",
+      "feature": "Kraken Ink Catalogue",
+      "title": "Catalogue accessible pre-login with product carousel and 'Shop now' link",
+      "steps": [
+        "Navigate to landing page /welcome and locate Kraken Ink Catalogue section",
+        "Verify a product carousel is visible with product cards",
+        "Click 'Shop now' button and verify navigation to /krakeninkcatalogue",
+        "On catalogue page verify products are displayed in a carousel and individual items link to product pages"
+      ],
+      "expected_result": "Catalogue is visible pre-login. 'Shop now' navigates to /krakeninkcatalogue. Products display in carousel and links are functional.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "catalogue",
+        "store",
+        "pre-login"
+      ],
+      "risk": null,
+      "trace": "Scope: Kraken Ink Catalogue (page 14). Requirement: accessible pre-login, carousel display, 'Shop now' link navigates to catalogue page."
+    },
+    {
+      "id": "TC-010",
+      "feature": "Store/Checkout",
+      "title": "Shipping cost application at checkout using basket threshold (<£30 => £3.99 else free) and dynamic updates",
+      "steps": [
+        "Add items to cart with total < £30 (e.g., item £10 x 2 => £20)",
+        "Open cart/checkout page and verify shipping line item £3.99 is added and total = items + 3.99",
+        "Remove an item to reduce total further and verify shipping recalculation updates immediately",
+        "Add items to make cart total > £30 and verify shipping line shows 'Free' and no £3.99 added",
+        "Proceed to Stripe checkout (test mode) and complete payment using Stripe test card (e.g., 4242 4242 4242 4242) and verify order success page and order appears in order history"
+      ],
+      "expected_result": "Shipping charge £3.99 is applied when basket total < £30; shipping free otherwise. Cart totals update dynamically when items added/removed. Stripe test payment completes and order recorded.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "store",
+        "checkout",
+        "shipping",
+        "stripe"
+      ],
+      "risk": null,
+      "trace": "Scope: Store/Checkout (page 24-26). Requirement: if basket total < £30 apply shipping cost £3.99; otherwise free; dynamically update basket total."
+    },
+    {
+      "id": "TC-011",
+      "feature": "Latest content",
+      "title": "Articles listing with category filters and 'Learn More' navigation; related articles filtered by role",
+      "steps": [
+        "Navigate to /blog or latest content page",
+        "Verify category filter UI exists and default view shows all",
+        "Select each category (News, Content, Events, Guides) and verify list updates to show only articles in selected category",
+        "Click 'Learn More' on an article and verify navigation to article detail page",
+        "On article detail page, observe related articles section; verify related articles belong to categories allowed for the current user role (e.g., consumer) and none are from disallowed roles",
+        "Repeat while logged in as a different role (trade/franchise) to confirm role-specific related content selection"
+      ],
+      "expected_result": "Filters correctly show category-specific articles. 'Learn More' navigates to article detail. Related articles are selected at random but restricted to allowed role types and do not show role-inappropriate articles.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "content",
+        "filters",
+        "role-based"
+      ],
+      "risk": null,
+      "trace": "Scope: Latest content (pages 26-27). Requirement: categories (News, Content, Events, Guides), thumbnails format, filter works, related articles random for role type and should not display role-restricted content."
+    },
+    {
+      "id": "TC-012",
+      "feature": "Competitions",
+      "title": "Competitions listing: live/temporary, entry character limit 1000 and 'none running' message",
+      "steps": [
+        "Create a live competition in CMS with entry text boxes and publish",
+        "Open front-end competitions page and verify live competition appears",
+        "On entry form, paste 1001 characters into a 'text' field and attempt to submit; observe validation",
+        "Paste exactly 1000 characters and verify input allowed and submission accepted",
+        "Remove all live competitions in CMS, publish, and reload front end; verify message 'there are no competitions currently running, please check back soon' is displayed"
+      ],
+      "expected_result": "Competition entry fields enforce max 1000-character limit; input box expands as needed. When no competitions exist, the specified message is displayed. Live/temporary competitions are shown in the new dedicated section.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "competitions",
+        "validation"
+      ],
+      "risk": null,
+      "trace": "Scope: Competitions (pages 26-28). Requirement: live/temporary sections, entry test fields max 1000 chars (input box expands), message when none running."
+    },
+    {
+      "id": "TC-013",
+      "feature": "Achievements",
+      "title": "Achievements UI - expand levels, completed count, blue dot for available tasks, badge coloring behavior",
+      "steps": [
+        "Log in as the test user",
+        "Navigate to /earn or achievements page",
+        "Verify achievements are grouped into categories and levels (bronze/silver/gold/foundation/milestones/dark deeds)",
+        "Expand a level and verify UI displays total badges in that level and count completed (e.g., '4 of 7')",
+        "Verify completed badges are displayed colored and incomplete badges are greyed out",
+        "Verify badges that have tasks available for the user display a blue dot",
+        "Click a badge with blue dot and verify it navigates to the associated tasks or claim action"
+      ],
+      "expected_result": "Achievements UI correctly shows counts, colored completed badges, greyed incomplete ones, blue dot indicator for available tasks, and navigation to task details works.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": [
+        "achievements",
+        "ui",
+        "progress"
+      ],
+      "risk": null,
+      "trace": "Scope: Achievements and progress (pages 32-34). Requirement: expandable levels showing completed counts, colored icons for completed, greyed for incomplete, blue dot indicating available tasks."
+    },
+    {
+      "id": "TC-014",
+      "feature": "Achievements",
+      "title": "Disciple of the Kraken - sacrifice 500 points flow, insufficient points handling, report update",
+      "steps": [
+        "Log in as user with <500 points and navigate to Disciple of the Kraken page",
+        "Click the 'sacrifice points' button and verify prompt indicating insufficient points and no deduction",
+        "Log in as user with >=500 points and click the 'sacrifice points' button",
+        "Confirm any confirmation dialog",
+        "Verify 500 points are deducted from the user's balance",
+        "Verify the Disciple badge turns gold in the achievements UI",
+        "Export or query the user report and verify columns 'Disciple status' = 'Yes' and 'Disciple date' populated with today's date"
+      ],
+      "expected_result": "If user has <500 points, an informative prompt appears and points are not deducted. If user has >=500 points, clicking sacrifice deducts exactly 500 points, badge turns gold, UI updated, and reporting shows 'Disciple status' = Yes with the date of achievement.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "achievements",
+        "disciple",
+        "reporting"
+      ],
+      "risk": null,
+      "trace": "Scope: Disciple of the Kraken (pages 34-35). Requirement: button to sacrifice 500 points, insufficient points prompt; when redeemed badge turns gold and reports include 'Disciple status' and date."
+    },
+    {
+      "id": "TC-015",
+      "feature": "Dashboard",
+      "title": "Profile/manage profile page - DOB displayed in number boxes and preference management",
+      "steps": [
+        "Log in as test user",
+        "Navigate to /account",
+        "Locate DOB fields and verify they are rendered as three separate number inputs with labels 'DD' 'MM' 'YY' or placeholder indicators",
+        "Change a communication preference (e.g., unsubscribe from email) and save profile",
+        "Verify UI shows success and profile data in database updated"
+      ],
+      "expected_result": "DOB is displayed and editable as three numeric inputs. Communication preferences can be updated and persist in backend.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "dashboard",
+        "profile",
+        "preferences"
+      ],
+      "risk": null,
+      "trace": "Scope: User dashboard and profile (pages 21-23). Requirement: DOB displayed in number boxes labeled DD MM YY, manage communications preferences present."
+    },
+    {
+      "id": "TC-016",
+      "feature": "Dashboard",
+      "title": "Credits and Order History listed newest-to-oldest",
+      "steps": [
+        "Log in as test user",
+        "Navigate to /account/reward-history and verify rewards displayed newest first (compare timestamps)",
+        "Navigate to /account/order-history and verify orders displayed newest first",
+        "If pagination exists, verify page 1 shows the newest items"
+      ],
+      "expected_result": "Rewards and orders are ordered newest-to-oldest. Pagination (if implemented) preserves ordering and page 1 displays most recent entries.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "dashboard",
+        "credits",
+        "order-history"
+      ],
+      "risk": null,
+      "trace": "Scope: Credits and order history (pages 22-24). Requirement: order rewards and orders newest to oldest."
+    },
+    {
+      "id": "TC-017",
+      "feature": "Dashboard",
+      "title": "Proof of membership popup displays on click",
+      "steps": [
+        "Log in and navigate to /account",
+        "Locate 'Proof of membership' circle on dashboard",
+        "Click the circle",
+        "Verify a popup/modal appears with membership details and close button",
+        "Verify popup can be closed and does not navigate away"
+      ],
+      "expected_result": "Clicking the Proof of Membership circle opens a modal/pop-up showing membership details and can be dismissed. No unexpected navigation occurs.",
+      "priority": "P2",
+      "type": "UI",
+      "tags": [
+        "dashboard",
+        "ui",
+        "membership"
+      ],
+      "risk": null,
+      "trace": "Scope: Proof of membership (page 24). Requirement: clicking Proof of Membership circle shows popup."
+    },
+    {
+      "id": "TC-018",
+      "feature": "Promo codes",
+      "title": "Promo code page - apply valid, invalid and expired codes and verify responses",
+      "steps": [
+        "Navigate to /promocode or checkout promo input",
+        "Enter valid code 'TEST10' and apply",
+        "Verify discount applied to cart totals and UI shows success message",
+        "Enter invalid code 'INVALID' and apply; verify error message 'promo code invalid' and no discount",
+        "Enter expired code 'EXPIRE1' and apply; verify error message 'promo code expired' and no discount"
+      ],
+      "expected_result": "Valid promo codes apply discounts and update totals. Invalid and expired codes return clear error messages and do not change totals.",
+      "priority": "P2",
+      "type": "Functional",
+      "tags": [
+        "promo",
+        "store",
+        "validation"
+      ],
+      "risk": null,
+      "trace": "Scope: Promo codes (page 35). Requirement: promo code section redesigned; functionality must allow apply and validation."
+    },
+    {
+      "id": "TC-019",
+      "feature": "CMS",
+      "title": "WYSIWYG editor source code button enabled and code snippet insertion for adding a button",
+      "steps": [
+        "Log in to CMS and open a page with WYSIWYG editor",
+        "Verify presence of 'Source code' toggle/button in the editor toolbar",
+        "Click source code and insert developer-provided snippet for a button (sample HTML)",
+        "Save/publish the page and open front-end page",
+        "Verify the button renders with expected label and opens link when clicked"
+      ],
+      "expected_result": "WYSIWYG source code toggle is present and allows insertion of HTML snippet. After publishing, the button appears on front end with expected label and link behavior.",
+      "priority": "P3",
+      "type": "Functional",
+      "tags": [
+        "cms",
+        "wysiwyg",
+        "devops"
+      ],
+      "risk": null,
+      "trace": "Scope: WYSIWYG editor (page 9-10). Requirement: enable source code editing and allow developer snippet to be inserted for adding buttons."
+    },
+    {
+      "id": "TC-020",
+      "feature": "Browser & Device Testing",
+      "title": "Execute representative layout and functional tests on stated browser/device matrix",
+      "steps": [
+        "Run smoke tests for core flows (Registration TC-001, Login TC-003, Home carousel TC-005, Checkout TC-010, Achievements TC-013) on each browser/version listed in scope",
+        "Run mobile tests on iPhone 6s/iOS14+, iPhone 11/iOS14+, Android 9/10 devices for core flows (Registration, Login, Home, Checkout)",
+        "Record rendering/layout issues, JS errors, and functional failures per browser/device"
+      ],
+      "expected_result": "Core flows work on browsers & devices listed in scope: Chrome (latest + prior), Safari (latest + prior on Mac), Firefox (latest + prior), Edge (latest + prior on PC). Mobile tests run on iOS >=14 and Android >=9. Any unsupported browsers outside list show upgrade message.",
+      "priority": "P1",
+      "type": "Regression",
+      "tags": [
+        "cross-browser",
+        "device"
+      ],
+      "risk": null,
+      "trace": "Scope: Browser & Device Testing (page 36). Requirement: test latest and prior versions for Chrome, Safari (Mac), Firefox, Edge; mobile iOS >=14 and Android >=9."
+    }
+  ],
+  "assumptions": [
+    "Staging environment URL is available and mirrors production behavior for testing.",
+    "Test user accounts and CMS seed data will be provided and include products, carousel items, competitions, serves, masterclasses, achievements and promo codes as required.",
+    "Stripe test mode is available with test API keys on staging to exercise checkout flows.",
+    "Video assets are hosted and reachable on staging and support seek/playback events for automation.",
+    "Reports (user export) are accessible or DB access will be provided to verify reporting columns (e.g., Disciple status and date).",
+    "CMS change publish actions propagate to front end in a reasonable time (no long cache delays) during tests.",
+    "S3-hosted placeholder PDFs are accessible via staging and not blocked by CORS for download verification.",
+    "GA/event tagging exists but event verification is out of scope except ensuring presence of event calls for major actions."
+  ],
+  "risks": [
+    "Unclear: exact minimum/maximum widths for hero images (KIS Hero Product) are not specified — may cause visual layout issues if content team uploads wrong sizes.",
+    "Unclear: deterministic behavior of 'randomly generated' suggested content and serve of the month - randomness makes automated verification non-deterministic; need a seeded/randomization flag for testing.",
+    "Unclear: exact CMS error message text and API response schema when attempting to mark multiple 'featured' serves — tests currently expect an error referencing the existing featured serve ID but exact wording is unspecified.",
+    "Unclear: age restriction policy is not defined in scope (no explicit minimum age). DOB validation test for underage behavior may require business rule confirmation.",
+    "Unclear: whether 'exactly £30' threshold counts as free shipping or requires <£30 only; scope suggests <£30 => shipping, >£30 => free; edge case for =£30 should be confirmed.",
+    "Risk: video '90% played' detection may rely on client-side events; automated headless playback may not trigger the same events; coordination with developers required to provide server-side verification hooks or test flags.",
+    "Risk: WYSIWYG source code insertion and developer snippets may be sanitized by CMS; need developer confirmation of allowed HTML subset and sample snippet for test.",
+    "Risk: Reporting update to include 'Disciple status' and date requires access to report generation; if reports run asynchronously, tests must account for processing delay.",
+    "Dependency: BrowserStack or equivalent tooling must be available and licensed for cross-browser/device testing.",
+    "Risk: 'Related articles selected at random for role type' requires deterministic test harness or ability to set related articles in CMS to validate role filtering deterministically."
+  ]
+}

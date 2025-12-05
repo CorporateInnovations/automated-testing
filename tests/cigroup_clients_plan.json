@@ -1,0 +1,36 @@
+{
+  "document_title": "CI Group - Clients Section (User Story Driven)",
+  "summary": "User story: As a prospective client, I want to reach the Clients section via About Us so I can see the brands CI Group works with.",
+  "user_stories": [
+    {
+      "id": "US-CI-CLIENTS-001",
+      "as_a": "Prospective client evaluating CI Group",
+      "i_want": "to view the Clients section by navigating from the homepage to About Us",
+      "so_that": "I can confirm which brands CI Group works with before engaging sales",
+      "acceptance_criteria": [
+        "About Us is reachable from the homepage navigation without search.",
+        "Clients section is reachable from About Us (anchor or in-page content).",
+        "Clients section displays visible client names/logos or copy describing clients."
+      ]
+    }
+  ],
+  "test_cases": [
+    {
+      "id": "TC-CI-CLIENTS-001",
+      "feature": "Navigation",
+      "title": "User story US-CI-CLIENTS-001: Navigate to About Us and view Clients section",
+      "user_story_id": "US-CI-CLIENTS-001",
+      "steps": [
+        "Act as a prospective client on https://www.cigroup.co.uk and arrive on the homepage.",
+        "From the primary navigation, open the About Us page.",
+        "Scroll or navigate within About Us to the Clients section/content.",
+        "Confirm the Clients section shows client names/logos or descriptive copy."
+      ],
+      "expected_result": "Clients section content is visible from the About Us path, satisfying the user story acceptance criteria.",
+      "priority": "P1",
+      "type": "Functional",
+      "tags": ["navigation", "clients", "about-us", "user-story"],
+      "trace": "US-CI-CLIENTS-001 -> Homepage -> About Us -> Clients"
+    }
+  ]
+}
